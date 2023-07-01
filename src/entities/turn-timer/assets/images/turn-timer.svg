@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="83" height="77">
     <filter id="f1">
-        <feDropShadow dx="0" dy="3.7" color="#000000" stdDeviation="0.0"></feDropShadow>
+        <feDropShadow dx="0" dy="3.8" color="#000000" stdDeviation="0.0"></feDropShadow>
     </filter>
     <g transform="translate(1,-1)">
         <path d="M80.5 57.64 L80.5 28.16 C80.35 25.89 80.07 24.28 78.88 22.32 C77.66 20.32 75.48 17.95 72.99 16.82 L55.28 7.75
