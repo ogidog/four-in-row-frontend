@@ -1,31 +1,31 @@
 import * as React from 'react';
 import styled, {css, keyframes} from "styled-components";
 import {useSelector} from "react-redux";
-import {selectAvailableRowByColumn} from "../../share/slices/game-slice";
+import {RootState} from "share/store/store";
 
-const dropdown = (row: number, availableRow: number) => keyframes`
+const dropdown = (isAvailable: boolean, playerId: number) => keyframes`
   0% {
     background-color: blue;
   }
   50% {
-    background-color: yellow;
+    background-color: ${playerId == 1 ? 'yellow' : 'orange'};
   }
   100% {
-    background-color: ${row < availableRow + 1 ? 'blue' : 'yellow'};
+    background-color: ${isAvailable ? 'blue' : playerId == 1 ? 'yellow' : 'orange'};
   }
 `
 
-const StyledContainer = styled.div<{ row: number, availableRow: number }>`
+const StyledContainer = styled.div<{ row: number, isAvailable: boolean, playerId: number }>`
   background-color: blue;
   border-radius: 50px;
   width: 100px;
   height: 100px;
-  box-shadow: inset 5px 0 0px 1px;
+  box-shadow: inset 0px 3px 0px 5px, inset 0px -2px 0px 2px;
 
-  ${props => props.availableRow < 5 && css`&:nth-child(${String(props.row + 1)}) {
-    animation: ${dropdown(props.row, props.availableRow)};
+  ${props => css`&:nth-child(${String(props.row + 1)}) {
+    animation: ${dropdown(props.isAvailable, props.playerId)};
     animation-delay: ${props.row! * 0.3}s;
-    animation-timing-function: ease-in-out;
+    animation-timing-function: unset;
     animation-duration: 1s;
     animation-fill-mode: forwards;
   }`}
@@ -35,10 +35,14 @@ type Props = { row: number, column: number };
 
 const GameField = (props: Props) => {
     const {row, column} = props;
-    const availableRow = useSelector(selectAvailableRowByColumn(column))
+
+    const gameState = useSelector((state: RootState) => state.game);
+    const isAvailable: boolean = gameState.gameFields[row][column] === 0;
+    const playerId: number = gameState.gameFields[row][column];
 
     return (
-        <StyledContainer row={row} availableRow={availableRow} key={row < availableRow + 1 ? Date.now() : row}/>
+        <StyledContainer row={row} isAvailable={isAvailable} playerId={playerId}
+                         key={isAvailable ? Date.now() : row}/>
     );
 };
 

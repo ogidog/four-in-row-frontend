@@ -1,2 +1,4 @@
 import GameField from "./game-field/game-field";
-export {GameField}
+import {TurnTimer} from "./turn-timer/ui/turn-timer";
+
+export {GameField, TurnTimer}

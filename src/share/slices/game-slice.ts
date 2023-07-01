@@ -7,7 +7,7 @@ export interface IGameSlice {
     gameFields: number[][];
 }
 
-const initState: IGameSlice = {
+const initialState: IGameSlice = {
     gameFields: Array.from(Array(6), () => Array(7).fill(0))
 }
 
@@ -29,7 +29,7 @@ const getAvailableRow = (gameFields: IGameSlice["gameFields"], column: number) =
 
 const gameSlice = createSlice({
     name: "game",
-    initialState: initState,
+    initialState: initialState,
     reducers: {
         setGameField: (state, action: PayloadAction<PlayerMove>) => {
             let availableRow = getAvailableRow(state.gameFields, action.payload.column);
