@@ -20,10 +20,18 @@ const Image = styled.img`
   height: 100%;
 `
 
+const Counter = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+`
+
 export const TurnTimer = () => {
     return (
         <StyledContainer>
             <Image src={TurnTimerImg} alt={""}/>
+            <Counter></Counter>
         </StyledContainer>
     );
 };
