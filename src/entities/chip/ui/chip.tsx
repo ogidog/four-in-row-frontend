@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled, {css, keyframes} from "styled-components";
 import {useSelector} from "react-redux";
-import {RootState} from "share/store/store";
+import {RootState} from "app/model/store";
+import {IChipSlice} from "../slices/slice";
 
 const dropdown = (isAvailable: boolean, playerId: number) => keyframes`
   0% {
@@ -15,7 +16,7 @@ const dropdown = (isAvailable: boolean, playerId: number) => keyframes`
   }
 `
 
-const StyledContainer = styled.div<{ row: number, isAvailable: boolean, playerId: number }>`
+const StyledContainer = styled.div<{ row: number, isAvailable: boolean, chipValue: IChipSlice["value"] }>`
   background-color: blue;
   border-radius: 50px;
   width: 100px;
@@ -23,7 +24,7 @@ const StyledContainer = styled.div<{ row: number, isAvailable: boolean, playerId
   box-shadow: inset 0px 3px 0px 5px, inset 0px -2px 0px 2px;
 
   ${props => css`&:nth-child(${String(props.row + 1)}) {
-    animation: ${dropdown(props.isAvailable, props.playerId)};
+    animation: ${dropdown(props.isAvailable, props.chipValue)};
     animation-delay: ${props.row! * 0.3}s;
     animation-timing-function: unset;
     animation-duration: 1s;
@@ -33,17 +34,17 @@ const StyledContainer = styled.div<{ row: number, isAvailable: boolean, playerId
 
 type Props = { row: number, column: number };
 
-const GameField = (props: Props) => {
+const Chip = (props: Props) => {
     const {row, column} = props;
 
-    const gameState = useSelector((state: RootState) => state.game);
-    const isAvailable: boolean = gameState.gameFields[row][column] === 0;
-    const playerId: number = gameState.gameFields[row][column];
+    const ChipState = useSelector((state: RootState) => state.game);
+    const isAvailable: boolean = ChipState.chips[row][column] === 0;
+    const chipValue = ChipState.chips[row][column];
 
     return (
-        <StyledContainer row={row} isAvailable={isAvailable} playerId={playerId}
+        <StyledContainer row={row} isAvailable={isAvailable} chipValue={chipValue}
                          key={isAvailable ? Date.now() : row}/>
     );
 };
 
-export default GameField
+export default Chip;

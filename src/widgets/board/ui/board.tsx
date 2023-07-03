@@ -1,14 +1,15 @@
 // @flow
 import * as React from 'react';
 import styled from "styled-components";
+import {FC} from "react";
 
 const StyledContainer = styled.div`
   position: relative;
   top: 50px;
-  
+
   border-radius: 10%;
   border: 3px solid #000000;
-  
+
   box-sizing: border-box;
 
   background-color: var(--white);
@@ -31,7 +32,7 @@ const GameFieldColumn = styled.div`
   background-color: #7221e8;
 `
 
-export const Board = () => {
+export const Board: FC<{ children: React.ReactElement }> = ({children}) => {
     // const dispatch = useDispatch();
     //
     // const clickHandle = () => {
@@ -40,13 +41,13 @@ export const Board = () => {
 
     return (
         <StyledContainer>
+            {children}
 
             {/*<GameFieldsColumn onClick={clickHandle}>*/}
             {/*    {Array.from(Array(6).keys()).map(index => {*/}
-            {/*         return <GameField row={index} column={0}/>*/}
+            {/*         return <Chip row={index} column={0}/>*/}
             {/*     })}*/}
             {/* </GameFieldsColumn>*/}
-
 
         </StyledContainer>
     );

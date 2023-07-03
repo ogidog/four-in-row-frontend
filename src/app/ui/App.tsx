@@ -7,7 +7,9 @@ const StyledContainer = styled.div`
 
   @media (max-width: 1023px) {
     width: 100dvw;
+    min-width: 100dvw;
     height: 100dvh;
+    overflow: auto;
   }
 
   @media (min-width: 1024px) {
@@ -16,9 +18,7 @@ const StyledContainer = styled.div`
   }
 
   position: relative;
-  margin: 0 auto;
   background-color: #9e6cff;
-  max-height: 100vh;
 `
 
 function App() {
