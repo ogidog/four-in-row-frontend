@@ -6,7 +6,7 @@ import {FC, useEffect, useState} from "react";
 import {TURN_TIME} from "app/model/const";
 
 const StyledContainer = styled.div`
-  position: relative;
+  position: absolute;
   top: 95%;
   left: 50%;
   transform: translateX(-50%);
