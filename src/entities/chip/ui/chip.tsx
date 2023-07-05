@@ -2,25 +2,25 @@ import * as React from 'react';
 import styled, {css, keyframes} from "styled-components";
 import {useSelector} from "react-redux";
 import {RootState} from "app/model/store";
-import {IChipSlice} from "../slices/slice";
+import {ChipValue} from "../model/types";
 
 const dropdown = (isAvailable: boolean, playerId: number) => keyframes`
   0% {
-    background-color: blue;
+    background-color: var(--table-color);
   }
   50% {
     background-color: ${playerId == 1 ? 'yellow' : 'orange'};
   }
   100% {
-    background-color: ${isAvailable ? 'blue' : playerId == 1 ? 'yellow' : 'orange'};
+    background-color: ${isAvailable ? 'var(--table-color)' : playerId == 1 ? 'yellow' : 'orange'};
   }
 `
 
-const StyledContainer = styled.div<{ row: number, isAvailable: boolean, chipValue: IChipSlice["value"] }>`
-  background-color: blue;
+const StyledContainer = styled.div<{ row: number, isAvailable: boolean, chipValue: ChipValue }>`
+  background-color: var(--table-color);
   border-radius: 50px;
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  aspect-ratio: 1/1;
   box-shadow: inset 0px 3px 0px 5px, inset 0px -2px 0px 2px;
 
   ${props => css`&:nth-child(${String(props.row + 1)}) {
@@ -32,14 +32,10 @@ const StyledContainer = styled.div<{ row: number, isAvailable: boolean, chipValu
   }`}
 `
 
-type Props = { row: number, column: number };
+type Props = { row: number, isAvailable: boolean, chipValue: ChipValue };
 
 const Chip = (props: Props) => {
-    const {row, column} = props;
-
-    const ChipState = useSelector((state: RootState) => state.game);
-    const isAvailable: boolean = ChipState.chips[row][column] === 0;
-    const chipValue = ChipState.chips[row][column];
+    const {row, chipValue, isAvailable} = props;
 
     return (
         <StyledContainer row={row} isAvailable={isAvailable} chipValue={chipValue}

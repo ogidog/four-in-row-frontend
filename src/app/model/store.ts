@@ -1,9 +1,9 @@
 import {configureStore} from "@reduxjs/toolkit";
-import ChipSlice from "entities/chip/slices/slice";
+import BoardSlice from "widgets/board/model/slice";
 
 export const store = configureStore({
     reducer: {
-        [ChipSlice.name]: ChipSlice,
+        [BoardSlice.name]: BoardSlice.reducer,
     }
 });
 

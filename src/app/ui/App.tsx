@@ -18,7 +18,7 @@ const StyledContainer = styled.div`
   }
 
   position: relative;
-  background-color: #9e6cff;
+  background-color: var(--table-color);
 `
 
 function App() {
