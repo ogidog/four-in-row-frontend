@@ -2,7 +2,6 @@
 import * as React from 'react';
 import styled from "styled-components";
 import {Board} from "widgets/index";
-import {TurnTimer} from "entities/index";
 
 const StyledComponent = styled.div`
   
@@ -45,9 +44,7 @@ const BackgroundBottom = styled.div`
 export const MainPage = () => {
     return (
         <StyledComponent>
-            <Board>
-                <TurnTimer playerId={0}/>
-            </Board>
+            <Board/>
             <BackgroundBottom/>
         </StyledComponent>
     );

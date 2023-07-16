@@ -1,16 +1,17 @@
 import {createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "app/model/store";
-import {RangeOf} from "share/types";
-import {ChipValue} from "entities/chip/model/types";
-
-type ColumnNumber = RangeOf<0, 6>;
+import {ChipValue, ColumnNumber} from "entities/chip/model/types";
 
 export interface IChipSlice {
-    chips: ChipValue[][]
+    chips: ChipValue[][],
+    selectedColumn: ColumnNumber | -1,
+    player: 1 | 2,
 }
 
 const initialState: IChipSlice = {
     chips: Array.from(Array(6), () => Array(7).fill(0)),
+    selectedColumn: -1,
+    player: 2,
 }
 
 const getAvailableRow = (chips: IChipSlice["chips"], column: ColumnNumber) => {
@@ -28,21 +29,24 @@ const BoardSlice = createSlice({
     name: "board",
     initialState: initialState,
     reducers: {
-        setChip: (state, action: PayloadAction<{ column: ColumnNumber, value: ChipValue }>) => {
+        setChip: (state, action: PayloadAction<{ column: ColumnNumber, }>) => {
             let availableRow = getAvailableRow(state.chips, action.payload.column);
-            if (availableRow != -1) {
-                state.chips[availableRow][action.payload.column] = action.payload.value;
+            if (availableRow !== -1) {
+                let value: ChipValue = state.player === 2 ? 1 : 2;
+                state.chips[availableRow][action.payload.column] = value;
+                state.selectedColumn = action.payload.column;
+                state.player = value;
             }
         }
     }
 })
 
-// export const selectAvailableRowByColumn = (column: ColumnNumber) => createSelector(
-//     (state: RootState) => state.board.chips,
-//     (chips: IChipSlice["chips"]) => {
-//         return getAvailableRow(chips, column);
-//     }
-// );
+export const selectAvailableRowByColumn = (column: ColumnNumber) => createSelector(
+    (state: RootState) => state.board.chips,
+    (chips: IChipSlice["chips"]) => {
+        return getAvailableRow(chips, column);
+    }
+);
 
 export const {setChip} = BoardSlice.actions;
 export default BoardSlice;

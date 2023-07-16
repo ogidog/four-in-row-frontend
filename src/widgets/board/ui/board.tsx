@@ -1,10 +1,12 @@
 // @flow
 import * as React from 'react';
 import styled from "styled-components";
-import {FC, JSX, useId} from "react";
-import {Chip, ChipsColumn} from "entities/index";
-import {useSelector} from "react-redux";
+import {JSX} from "react";
+import {Chip, ChipsColumn, TurnTimer} from "entities/index";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "app/model/store";
+import {RowNumber, ColumnNumber} from "entities/chip/model/types";
+import {setChip} from "../model/slice";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -32,26 +34,40 @@ const StyledContainer = styled.div`
   z-index: 10;
 `
 
-export const Board: FC<{ children: React.ReactElement }> = ({children}) => {
-    // const dispatch = useDispatch();
-    //
-    // const clickHandle = () => {
-    //     dispatch(setGameField({column: 0, playerId: 2}))
-    // }
-
+export const Board = () => {
+    const dispatch = useDispatch();
     const chips = useSelector((state: RootState) => state.board.chips);
+    const selectedColumn = useSelector((state: RootState) => state.board.selectedColumn);
+    const player = useSelector((state: RootState) => state.board.player);
+
+    const clickHandle = (column: ColumnNumber) => {
+        dispatch(setChip({column: column}));
+    }
+
 
     const drawBoard = () => {
         const boardChips = new Array<any | string | JSX.Element>([])
-        for (let j = 0; j < chips[0].length; j++) {
+        for (let j: ColumnNumber = 0; j < chips[0].length; j++) {
             const chipsColumn = new Array<any | string | JSX.Element>([])
+
             for (let i = 0; i < chips.length; i++) {
                 chipsColumn.push(
-                    <Chip key={`${j}${i}`} row={i} isAvailable={chips[i][j] === 0} chipValue={chips[i][j]} />
+                    <Chip
+                        key={`${j}${i}`}
+                        row={i as RowNumber}
+                        isAvailable={chips[i][j] === 0}
+                        value={chips[i][j]}
+                    />
                 )
             }
+
             boardChips.push(
-                <ChipsColumn>
+                <ChipsColumn
+                    key={j}
+                    onClick={() => clickHandle(j)}
+                    column={j as ColumnNumber}
+                    isSelected={selectedColumn === j}
+                >
                     {chipsColumn}
                 </ChipsColumn>
             )
@@ -62,7 +78,7 @@ export const Board: FC<{ children: React.ReactElement }> = ({children}) => {
     return (
         <StyledContainer>
             <>
-                {children}
+                <TurnTimer player={player}/>
                 {drawBoard()}
             </>
         </StyledContainer>

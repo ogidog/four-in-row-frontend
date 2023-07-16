@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
-import {FC, JSX} from "react";
+import {JSX, memo} from "react";
 import styled from "styled-components";
+import {ColumnNumber} from "entities/chip/model/types";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -9,18 +10,31 @@ const StyledContainer = styled.div`
   grid-row-gap: 10px;
   justify-items: center;
   align-items: center;
-  
+
   width: 100%;
   height: fit-content;
-  
+
 `
 
-const ChipsColumn: FC<{ children: any | string | JSX.Element }> = ({children}) => {
+type Props = {
+    isSelected: boolean,
+    column: ColumnNumber,
+    children: any | string | JSX.Element,
+    onClick: (event: React.MouseEvent) => void
+}
+
+const ChipsColumn = (props: Props) => {
+    const {children, onClick} = props;
+
+    const clickHandle = (event: React.MouseEvent) => {
+        onClick(event);
+    }
+
     return (
-        <StyledContainer>
+        <StyledContainer onClick={clickHandle}>
             {children}
         </StyledContainer>
     );
 };
 
-export default ChipsColumn;
+export default memo(ChipsColumn, (prevProps, newProps) => !newProps.isSelected);

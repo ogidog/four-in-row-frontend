@@ -2,10 +2,10 @@
 import * as React from 'react';
 import styled from "styled-components";
 import TurnTimerImg from "../assets/images/turn-timer.svg";
-import {FC, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {TURN_TIME} from "app/model/const";
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.div<{player: Props["player"]}>`
   position: absolute;
   top: 95%;
   left: 50%;
@@ -52,14 +52,20 @@ const Counter = styled.div`
 
 let countDownTimerId: NodeJS.Timer;
 
-export const TurnTimer: FC<{ playerId: 0 | 1 }> = ({playerId}) => {
+type Props = {
+    player: 0 | 1 | 2
+}
+
+export const TurnTimer = (props: Props) => {
+
+    const {player} = props;
 
     let [counterValue, setCountDownValue] = useState(TURN_TIME);
 
     counterValue < 1 && clearInterval(countDownTimerId);
 
     const getPlayerName = () => {
-        return playerId == 0 ? "YOUR TURN" : "AI TURN";
+        return player === 1 ? "CPU TURN" : "YOUR TURN";
     }
 
     useEffect(() => {
@@ -76,10 +82,10 @@ export const TurnTimer: FC<{ playerId: 0 | 1 }> = ({playerId}) => {
         return () => {
             clearInterval(countDownTimerId);
         }
-    }, [])
+    }, [player])
 
     return (
-        <StyledContainer>
+        <StyledContainer player={player}>
             <Image src={TurnTimerImg} alt={""}/>
             <Counter>
                 <div>{getPlayerName()}</div>
