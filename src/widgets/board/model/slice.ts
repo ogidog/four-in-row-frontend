@@ -5,13 +5,13 @@ import {ChipValue, ColumnNumber} from "entities/chip/model/types";
 export interface IChipSlice {
     chips: ChipValue[][],
     selectedColumn: ColumnNumber | -1,
-    player: 1 | 2,
+    player: 0 | 1 | 2,
 }
 
 const initialState: IChipSlice = {
     chips: Array.from(Array(6), () => Array(7).fill(0)),
     selectedColumn: -1,
-    player: 2,
+    player: 0,
 }
 
 const getAvailableRow = (chips: IChipSlice["chips"], column: ColumnNumber) => {
@@ -32,7 +32,7 @@ const BoardSlice = createSlice({
         setChip: (state, action: PayloadAction<{ column: ColumnNumber, }>) => {
             let availableRow = getAvailableRow(state.chips, action.payload.column);
             if (availableRow !== -1) {
-                let value: ChipValue = state.player === 2 ? 1 : 2;
+                let value: ChipValue = state.player === 0 ? 1 : state.player === 2 ? 1 : 2;
                 state.chips[availableRow][action.payload.column] = value;
                 state.selectedColumn = action.payload.column;
                 state.player = value;

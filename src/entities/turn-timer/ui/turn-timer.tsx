@@ -57,7 +57,7 @@ type Props = {
 }
 
 export const TurnTimer = (props: Props) => {
-
+//сделать таймер чтоб запускался после анимации
     const {player} = props;
 
     let [counterValue, setCountDownValue] = useState(TURN_TIME);

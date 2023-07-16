@@ -57,6 +57,7 @@ export const Board = () => {
                         row={i as RowNumber}
                         isAvailable={chips[i][j] === 0}
                         value={chips[i][j]}
+                        player={player}
                     />
                 )
             }
