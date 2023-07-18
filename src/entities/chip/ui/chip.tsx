@@ -19,10 +19,10 @@ const dropdown = (isAvailable: boolean, value: ChipValue, player: Player) => key
     background-color: ${isAvailable && 'var(--table-color)'};
   }
   50% {
-    background-color: ${!isAvailable || player === 0? 'rgba(255,255,255/0.01)' : player === 1 ? 'yellow' : 'orange'};
+    background-color: ${!isAvailable || player === 0? 'rgba(255,255,255/0.01)' : player === 1 ? '#f8f861' : 'orange'};
   }
   100% {
-    background-color: ${isAvailable ? 'var(--table-color)' : value === 1 ? 'yellow' : 'orange'};
+    background-color: ${isAvailable ? 'var(--table-color)' : value === 1 ? '#f8f861' : 'orange'};
   }
 `
 

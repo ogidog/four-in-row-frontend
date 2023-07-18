@@ -1,11 +1,12 @@
 // @flow
 import * as React from 'react';
 import styled from "styled-components";
-import TurnTimerImg from "../assets/images/turn-timer.svg";
-import {useEffect, useState} from "react";
-import {TURN_TIME} from "app/model/const";
+import {ReactComponent as TurnTimerImg} from "../assets/images/turn-timer.svg";
+import {useEffect, useRef, useState} from "react";
+import {TURN_TIME} from "entities/turn-timer/model/const";
+import {getImgSrc} from "../libs/libs";
 
-const StyledContainer = styled.div<{player: Props["player"]}>`
+const StyledContainer = styled.div`
   position: absolute;
   top: 95%;
   left: 50%;
@@ -32,7 +33,7 @@ const Counter = styled.div`
   top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #ffffff;
+  color: #030303;
 
   display: flex;
   flex-direction: column;
@@ -50,45 +51,47 @@ const Counter = styled.div`
   }
 `
 
-let countDownTimerId: NodeJS.Timer;
-
 type Props = {
     player: 0 | 1 | 2
 }
 
+const getPlayerName = (player: 0 | 1 | 2) => {
+    return player === 1 ? "CPU TURN" : "YOUR TURN";
+}
+
 export const TurnTimer = (props: Props) => {
-//сделать таймер чтоб запускался после анимации
+
     const {player} = props;
+    const [counterValue, setCountDownValue] = useState(TURN_TIME);
+    const countDownTimerIdRef = useRef<NodeJS.Timer>();
+    const timerBackgroundColorRef = useRef<string>("#f8f861");
 
-    let [counterValue, setCountDownValue] = useState(TURN_TIME);
-
-    counterValue < 1 && clearInterval(countDownTimerId);
-
-    const getPlayerName = () => {
-        return player === 1 ? "CPU TURN" : "YOUR TURN";
-    }
+    counterValue < 1 && clearInterval(countDownTimerIdRef.current);
 
     useEffect(() => {
-        if (countDownTimerId) {
-            clearInterval(countDownTimerId);
+        if (countDownTimerIdRef.current) {
+            clearInterval(countDownTimerIdRef.current);
             setCountDownValue(TURN_TIME);
         }
 
-        countDownTimerId = setInterval(() => {
-            counterValue -= 1;
-            setCountDownValue(counterValue);
+        let initialValue = TURN_TIME;
+        countDownTimerIdRef.current = setInterval(() => {
+            setCountDownValue(initialValue--);
         }, 1000);
 
+        timerBackgroundColorRef.current = player === 0 ? "#f8f861" : player === 1 ? "orange" : "#f8f861";
+
         return () => {
-            clearInterval(countDownTimerId);
+            clearInterval(countDownTimerIdRef.current);
         }
-    }, [player])
+
+    }, [player]);
 
     return (
-        <StyledContainer player={player}>
-            <Image src={TurnTimerImg} alt={""}/>
+        <StyledContainer>
+            <Image src={getImgSrc({fill: `${timerBackgroundColorRef.current}`})}/>
             <Counter>
-                <div>{getPlayerName()}</div>
+                <div>{getPlayerName(player)}</div>
                 <div>{counterValue} s</div>
             </Counter>
         </StyledContainer>
