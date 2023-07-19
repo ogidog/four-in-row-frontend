@@ -6,12 +6,14 @@ export interface IChipSlice {
     chips: ChipValue[][],
     selectedColumn: ColumnNumber | -1,
     player: 0 | 1 | 2,
+    moves: string,
 }
 
 const initialState: IChipSlice = {
     chips: Array.from(Array(6), () => Array(7).fill(0)),
     selectedColumn: -1,
     player: 0,
+    moves: "",
 }
 
 const getAvailableRow = (chips: IChipSlice["chips"], column: ColumnNumber) => {
@@ -36,6 +38,7 @@ const BoardSlice = createSlice({
                 state.chips[availableRow][action.payload.column] = value;
                 state.selectedColumn = action.payload.column;
                 state.player = value;
+                state.moves += String(action.payload.column);
             }
         }
     }

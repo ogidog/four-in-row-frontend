@@ -52,7 +52,8 @@ const Counter = styled.div`
 `
 
 type Props = {
-    player: 0 | 1 | 2
+    player: 0 | 1 | 2,
+    onCountdownChange?: (countdown: number) => void,
 }
 
 const getPlayerName = (player: 0 | 1 | 2) => {
@@ -61,28 +62,31 @@ const getPlayerName = (player: 0 | 1 | 2) => {
 
 export const TurnTimer = (props: Props) => {
 
-    const {player} = props;
-    const [counterValue, setCountDownValue] = useState(TURN_TIME);
-    const countDownTimerIdRef = useRef<NodeJS.Timer>();
+    const {player, onCountdownChange} = props;
+    const [countdown, setCountdown] = useState(TURN_TIME);
+    const countdownTimerIdRef = useRef<NodeJS.Timer>();
     const timerBackgroundColorRef = useRef<string>("#f8f861");
 
-    counterValue < 1 && clearInterval(countDownTimerIdRef.current);
+    countdown < 1 && clearInterval(countdownTimerIdRef.current);
 
     useEffect(() => {
-        if (countDownTimerIdRef.current) {
-            clearInterval(countDownTimerIdRef.current);
-            setCountDownValue(TURN_TIME);
+        if (countdownTimerIdRef.current) {
+            clearInterval(countdownTimerIdRef.current);
+            setCountdown(TURN_TIME);
         }
 
         let initialValue = TURN_TIME;
-        countDownTimerIdRef.current = setInterval(() => {
-            setCountDownValue(initialValue--);
+        countdownTimerIdRef.current = setInterval(() => {
+            initialValue -= 1;
+
+            onCountdownChange && onCountdownChange(initialValue);
+            setCountdown(initialValue);
         }, 1000);
 
         timerBackgroundColorRef.current = player === 0 ? "#f8f861" : player === 1 ? "orange" : "#f8f861";
 
         return () => {
-            clearInterval(countDownTimerIdRef.current);
+            clearInterval(countdownTimerIdRef.current);
         }
 
     }, [player]);
@@ -92,7 +96,7 @@ export const TurnTimer = (props: Props) => {
             <Image src={getImgSrc({fill: `${timerBackgroundColorRef.current}`})}/>
             <Counter>
                 <div>{getPlayerName(player)}</div>
-                <div>{counterValue} s</div>
+                <div>{countdown} s</div>
             </Counter>
         </StyledContainer>
     );

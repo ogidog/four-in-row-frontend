@@ -1,12 +1,13 @@
 // @flow
 import * as React from 'react';
 import styled from "styled-components";
-import {JSX} from "react";
+import {JSX, useEffect} from "react";
 import {Chip, ChipsColumn, TurnTimer} from "entities/index";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "app/model/store";
 import {RowNumber, ColumnNumber} from "entities/chip/model/types";
 import {setChip} from "../model/slice";
+import {emulateCPUMove} from "../libs/libs";
 
 const StyledContainer = styled.div`
   display: grid;
@@ -40,9 +41,23 @@ export const Board = () => {
     const selectedColumn = useSelector((state: RootState) => state.board.selectedColumn);
     const player = useSelector((state: RootState) => state.board.player);
 
+    const onCountdownChange = (countdown: number) => {
+        if (countdown < 1) {
+            window.alert("TIME IS OUT! YOU LOOSE!");
+        }
+    }
+
     const clickHandle = (column: ColumnNumber) => {
         dispatch(setChip({column: column}));
-    }
+    };
+
+    useEffect(() => {
+        if (player === 1) {
+            setTimeout(() => {
+                dispatch(setChip({column: emulateCPUMove()}));
+            }, 6000);
+        }
+    }, [player]);
 
 
     const drawBoard = () => {
@@ -79,7 +94,7 @@ export const Board = () => {
     return (
         <StyledContainer>
             <>
-                <TurnTimer player={player}/>
+                <TurnTimer player={player} onCountdownChange={onCountdownChange}/>
                 {drawBoard()}
             </>
         </StyledContainer>
