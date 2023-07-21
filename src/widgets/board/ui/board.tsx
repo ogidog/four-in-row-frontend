@@ -2,7 +2,7 @@
 import * as React from 'react';
 import styled from "styled-components";
 import {JSX, useEffect} from "react";
-import {Chip, ChipsColumn, TurnTimer} from "entities/index";
+import {Chip, ChipsColumn, Informer, TurnTimer} from "entities/index";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "app/model/store";
 import {RowNumber, ColumnNumber} from "entities/chip/model/types";
@@ -94,7 +94,8 @@ export const Board = () => {
     return (
         <StyledContainer>
             <>
-                <TurnTimer player={player} onCountdownChange={onCountdownChange}/>
+                {/*<TurnTimer player={player} onCountdownChange={onCountdownChange}/>*/}
+                <Informer player={0}/>
                 {drawBoard()}
             </>
         </StyledContainer>
